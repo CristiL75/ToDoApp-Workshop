@@ -1,3 +1,7 @@
+export function getById(id) {
+  const todos = load();
+  return todos.find(todo => todo.id === id) || null;
+}
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';

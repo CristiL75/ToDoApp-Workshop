@@ -2,6 +2,11 @@ import { listTasks, createTask, deleteTask, completeTask } from './controller.js
 import logger from './logger.js';
 
 export function handle(req, res) {
+    if (req.method === 'PUT') {
+      res.writeHead(405, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'PUT method not allowed' }));
+      return;
+    }
   const urlParts = req.url.split('/');
   
   logger.emit('log', 'info', `Received request: ${req.method} ${req.url}`);
