@@ -1,4 +1,4 @@
-import { listTasks, createTask, deleteTask, completeTask, updateTaskDate } from './controller.js';
+import { listTasks, createTask, deleteTask, completeTask, updateTaskDate, setTaskDelay } from './controller.js';
 import logger from './logger.js';
 
 export function handle(req, res) {
