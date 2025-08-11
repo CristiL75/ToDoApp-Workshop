@@ -15,7 +15,7 @@ export function handle(req, res) {
     const id = urlParts[2];
     deleteTask(req, res, id);
   } 
-  else if (urlParts[1] === 'todos' && urlParts[3] === 'complete' && req.method === 'PATCH') {
+  else if (urlParts[1] === "todos" && urlParts[3] === 'complete' && req.method === 'PATCH') {
     const id = urlParts[2];
     completeTask(req, res, id);
   }
