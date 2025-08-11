@@ -29,13 +29,14 @@ export function getAll() {
   return load();
 }
 
-export function create(title, description) {
+export function create(title, description, dateToModify = null) {
   const todos = load();
   const todo = {
     id: generateId(),
     title,
     description,
-    done: false
+    done: false,
+    dateToModify: dateToModify
   };
   todos.push(todo);
   save(todos);
@@ -56,6 +57,15 @@ export function markComplete(id) {
   const todo = todos.find(t => t.id === id);
   if (!todo) return null;
   todo.done = true;
+  save(todos);
+  return todo;
+}
+
+export function updateDateToModify(id, dateToModify) {
+  const todos = load();
+  const todo = todos.find(t => t.id === id);
+  if (!todo) return null;
+  todo.dateToModify = dateToModify;
   save(todos);
   return todo;
 }

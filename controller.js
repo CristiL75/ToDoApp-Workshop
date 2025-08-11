@@ -1,4 +1,5 @@
-import { getAll, create, remove, markComplete } from './model.js';
+import { getAll, create, remove, markComplete, updateDateToModify } from './model.js';
+import { scheduleTaskCompletion, cancelTaskTimeout } from './utils.js';
 
 export function listTasks(req, res) {
   const todos = getAll();
@@ -17,7 +18,11 @@ export function createTask(req, res) {
         res.end(JSON.stringify({ error: 'Title is required' }));
         return;
       }
-      const todo = create(data.title, data.description || '');
+      const todo = create(data.title, data.description || '', data.dateToModify || null);
+      
+      // Re-programează toate timeout-urile după crearea unui nou task
+      scheduleTaskCompletion();
+      
       res.writeHead(201, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(todo));
     } catch {
@@ -28,6 +33,9 @@ export function createTask(req, res) {
 }
 
 export function deleteTask(req, res, id) {
+  // Anulează timeout-ul pentru acest task înainte de a-l șterge
+  cancelTaskTimeout(id);
+  
   const success = remove(id);
   if (!success) {
     res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -39,6 +47,9 @@ export function deleteTask(req, res, id) {
 }
 
 export function completeTask(req, res, id) {
+  // Anulează timeout-ul pentru acest task înainte de a-l marca ca fiind completat
+  cancelTaskTimeout(id);
+  
   const todo = markComplete(id);
   if (!todo) {
     res.writeHead(404, { 'Content-Type': 'application/json' });
