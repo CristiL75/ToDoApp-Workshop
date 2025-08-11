@@ -55,14 +55,6 @@ export function createTask(req, res) {
         res.end(JSON.stringify({ error: 'Description too long' }));
         return;
       }
-      // Duplicate title check
-      const todos = getAll();
-      if (todos.some(t => t.title === data.title)) {
-        logger.emit('log', 'error', 'Task creation failed: Task with this title already exists');
-        res.writeHead(409, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Task with this title already exists' }));
-        return;
-      }
       // Check for extra/invalid fields (optional)
       const allowedFields = ['title', 'description', 'done', 'dateToModify'];
       const invalidFields = Object.keys(data).filter(k => !allowedFields.includes(k));
