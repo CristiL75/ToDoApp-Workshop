@@ -1,6 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import crypto from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,7 +23,7 @@ function save(todos) {
 }
 
 function generateId() {
-  return Math.random().toString(36).substr(2, 9);
+  return crypto.randomBytes(6).toString('base64url'); 
 }
 
 export function getAll() {
@@ -46,7 +47,7 @@ export function remove(id) {
   let todos = load();
   const initialLength = todos.length;
   todos = todos.filter(todo => todo.id !== id);
-  if (todos.length === initialLength) return false; // not found
+  if (todos.length === initialLength) return false;
   save(todos);
   return true;
 }
