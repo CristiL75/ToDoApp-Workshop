@@ -141,6 +141,7 @@ export function updateTaskDate(req, res, id) {
     try {
       const data = JSON.parse(body);
       if (!data.dateToModify) {
+        logger.emit('log', 'error', 'Task date update failed: dateToModify is required');
         res.writeHead(400, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Date to modify is required' }));
         return;
@@ -151,6 +152,7 @@ export function updateTaskDate(req, res, id) {
       
       const todo = updateDateToModify(id, data.dateToModify);
       if (!todo) {
+        logger.emit('log', 'error', `Task date update failed: Task with ID ${id} not found`);
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Task not found' }));
         return;
@@ -159,9 +161,11 @@ export function updateTaskDate(req, res, id) {
       // Re-programează toate timeout-urile după actualizarea datei
       scheduleTaskCompletion();
       
+      logger.emit('log', 'info', `Updated dateToModify for task with ID: ${id} to ${data.dateToModify}`);
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(todo));
     } catch {
+      logger.emit('log', 'error', 'Task date update failed: Invalid JSON');
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Invalid JSON' }));
     }
@@ -175,6 +179,7 @@ export function setTaskDelay(req, res, id) {
     try {
       const data = JSON.parse(body);
       if (!data.delayInSeconds || typeof data.delayInSeconds !== 'number' || data.delayInSeconds <= 0) {
+        logger.emit('log', 'error', 'Task delay update failed: Valid delayInSeconds (positive number) is required');
         res.writeHead(400, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Valid delayInSeconds (positive number) is required' }));
         return;
@@ -190,6 +195,7 @@ export function setTaskDelay(req, res, id) {
       
       const todo = updateDateToModify(id, dateToModify);
       if (!todo) {
+        logger.emit('log', 'error', `Task delay update failed: Task with ID ${id} not found`);
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Task not found' }));
         return;
@@ -200,9 +206,11 @@ export function setTaskDelay(req, res, id) {
       
       console.log(`Task "${todo.title}" will auto-complete in ${data.delayInSeconds} seconds at ${futureDate.toLocaleString()}`);
       
+      logger.emit('log', 'info', `Set delay for task with ID: ${id} to ${data.delayInSeconds} seconds`);
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(todo));
     } catch {
+      logger.emit('log', 'error', 'Task delay update failed: Invalid JSON');
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Invalid JSON' }));
     }
