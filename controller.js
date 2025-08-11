@@ -1,12 +1,14 @@
-import model from './model.js';
+import { getAll, create } from './model.js';
 
-exports.listTasks = (req, res) => {
-  const todos = model.getAll();
+
+export function listTasks(req, res) {
+  const todos = getAll();
   res.writeHead(200, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify(todos));
-};
+}
 
-exports.createTask = (req, res) => {
+
+export function createTask(req, res) {
   let body = '';
   req.on('data', chunk => { body += chunk; });
   req.on('end', () => {
@@ -17,7 +19,7 @@ exports.createTask = (req, res) => {
         res.end(JSON.stringify({ error: 'Title is required' }));
         return;
       }
-      const todo = model.create(data.title, data.description || '');
+      const todo = create(data.title, data.description || '');
       res.writeHead(201, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(todo));
     } catch (e) {
@@ -25,4 +27,4 @@ exports.createTask = (req, res) => {
       res.end(JSON.stringify({ error: 'Invalid JSON' }));
     }
   });
-};
+}

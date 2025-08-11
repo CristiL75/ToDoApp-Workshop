@@ -1,12 +1,13 @@
-import controller from './controller.js';
+import { listTasks, createTask } from './controller.js';
 
-exports.handle = (req, res) => {
+
+export function handle(req, res) {
   if (req.url === '/todos' && req.method === 'GET') {
-    controller.listTasks(req, res);
+    listTasks(req, res);
   } else if (req.url === '/todos' && req.method === 'POST') {
-    controller.createTask(req, res);
+    createTask(req, res);
   } else {
     res.writeHead(404, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: 'Not found' }));
   }
-};
+}

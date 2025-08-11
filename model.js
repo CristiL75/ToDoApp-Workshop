@@ -1,5 +1,8 @@
-import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const DATA_FILE = path.join(__dirname, 'todos.json');
 
@@ -21,11 +24,11 @@ function generateId() {
   return Math.random().toString(36).substr(2, 9);
 }
 
-exports.getAll = () => {
+export function getAll() {
   return load();
-};
+}
 
-exports.create = (title, description) => {
+export function create(title, description) {
   const todos = load();
   const todo = {
     id: generateId(),
@@ -36,4 +39,4 @@ exports.create = (title, description) => {
   todos.push(todo);
   save(todos);
   return todo;
-};
+}
