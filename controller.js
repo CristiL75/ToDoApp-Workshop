@@ -1,4 +1,4 @@
-const model = require('./model');
+import model from './model.js';
 
 exports.listTasks = (req, res) => {
   const todos = model.getAll();

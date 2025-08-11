@@ -1,5 +1,5 @@
-const http = require('http');
-const router = require('./router');
+import http from 'http';
+import router from './router.js';
 
 const server = http.createServer((req, res) => {
   router.handle(req, res);

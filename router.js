@@ -1,4 +1,4 @@
-const controller = require('./controller');
+import controller from './controller.js';
 
 exports.handle = (req, res) => {
   if (req.url === '/todos' && req.method === 'GET') {
