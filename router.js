@@ -1,9 +1,10 @@
 import { listTasks, createTask, deleteTask, completeTask } from './controller.js';
+import logger from './logger.js';
 
 export function handle(req, res) {
   const urlParts = req.url.split('/');
   
-  console.log(`Received request: ${req.method} ${req.url}`);
+  logger.emit('log', 'info', `Received request: ${req.method} ${req.url}`);
 
   if (req.url === '/todos' && req.method === 'GET') {
     listTasks(req, res);
